@@ -1,1 +1,34 @@
-</h1>hello, enter the location you need nearby your desination.</h1>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Leaflet Map</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE...">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder@1.13.0/dist/Control.Geocoder.css" />
+    <style>
+		#map {
+			height: 500px;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="map"></div>
+  <h3 class="container" style="align-items: right;"><a href="book">My Bookings</a></h3>
+	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+..."></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder@1.13.0/dist/Control.Geocoder.js"></script>
+    <script>
+		var map = L.map('map').setView([28.644800,77.216721], 5);
+
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+			maxZoom: 18,
+		}).addTo(map);
+        L.Control.geocoder().addTo(map);
+        {% for list in lists %} 
+        var marker = L.marker([{{list.latitude}}, {{list.longitude}}]).addTo(map);
+        marker.bindPopup("Rs. {{list.rate}} per day <br> <a href='{% url 'myBookings' id=list.id %}'>Book</a>").openPopup();
+    {% endfor %}
+
+      </script>
+    </body>
+    </html>
