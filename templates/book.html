@@ -42,7 +42,7 @@
         }
     </style>
   </head>
-  <h1 class="container my-marked-locations">MY MARKED LOCATIONS</h1>
+  <h1 class="container my-marked-locations">MY BOOKINGS</h1>
   <table>
     <tr>
       <th>Sr. No</th>
@@ -50,7 +50,8 @@
       <th>Longitude</th>
       <th>Rate</th>
       <th>photo</th>
-      <th>Delete</th>
+      <th>Find way</th>
+      <th>status</th>
     </tr>
     {% for list in lists %}
       <tr>
@@ -61,18 +62,14 @@
         <td><div class="image-gallery">
             <img src="{{list.photo.url}}" alt="Photo">
         </div></td>
-        <td><a href="{% url 'delLocation' list.id %}" class="delete-link">Delete</a></td>
+        <td><b><a href="{% url 'find' id=list.id %}">Way</a></b></td>
+        <td><b><a href="{% url 'tripOver' id=list.id %}">Click if trip over</a></b></td>
+
+
       </tr>
     {% endfor %}
   </table>
-  <h3>
-    <div class="container" style="text-align: right;">
-        <a href="show">Show on map</a>
-    </div>
-    <div class="container" style="text-align: left;">
-        <a href="provider">Add location</a>
-    </div>    
-    </h3>
+  <h3><a href="logout">Logout</a></h3>
 
 {% else %}
   <a href="login">Login</a>

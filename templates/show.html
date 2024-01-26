@@ -11,9 +11,9 @@
 	</style>
 </head>
 <body>
-
+    <h2 class="container" style="text-align: right;"><a href="pdashboard">My dashboard</a></h2>
 	<div id="map"></div>
-  <h3 class="container" style="align-items: right;"><a href="book">My Bookings</a></h3>
+
 	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+..."></script>
     <script src="https://unpkg.com/leaflet-control-geocoder@1.13.0/dist/Control.Geocoder.js"></script>
     <script>
@@ -26,9 +26,8 @@
         L.Control.geocoder().addTo(map);
         {% for list in lists %} 
         var marker = L.marker([{{list.latitude}}, {{list.longitude}}]).addTo(map);
-        marker.bindPopup("Rs. {{list.rate}} per day <br> <a href='{% url 'myBookings' id=list.id %}'>Book</a>").openPopup();
+        marker.bindPopup("Rs. {{list.rate}} per day").openPopup();
     {% endfor %}
-
-      </script>
-    </body>
-    </html>
+	</script>
+</body>
+</html>
