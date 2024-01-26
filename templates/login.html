@@ -1,25 +1,59 @@
-<h1>Login Here</h1>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login Here</title>
+	<style>
+	    h4 {
+	        color: red;
+	    }
+	    form {
+	        margin: 0 auto;
+	        width: 50%;
+	        padding: 20px;
+	        border: 1px solid #ccc;
+	    }
+	    form p {
+	        text-align: center;
+	    }
+	    form input[type="text"],
+	    form input[type="email"],
+	    form input[type="password"] {
+	        width: 100%;
+	        padding: 10px;
+	        margin: 10px 0;
+	        box-sizing: border-box;
+	    }
+	    form input[type="submit"] {
+	        background-color: #4CAF50;
+	        color: white;
+	        padding: 10px;
+	        border: none;
+	        cursor: pointer;
+	        width: 100%;
+	    }
+	    h3 {
+	        text-align: center;
+	    }
+	</style>
+</head>
+<body>
+	<h1>Login Here</h1>
 
+	{% for message in messages %}
+		<h4>{{message}}</h4>
+	{% endfor %}
 
-{% for message in messages %}
-<h4>{{message}}</h4>
-{% endfor %}
+	<form action="" method="POST">
+	    {% csrf_token %}
+	    <p>Enter username</p>
+	    <input type="text" id="username" name="username">
+	    <p>Enter Passsword</p>
+	    <input type="password" name="password" id="password">
+	    <input type="submit">
+	</form>
 
-<style>
-    h4{
-        color: red;
-    }
-</style>
+	<br>
 
-<form action="" method="POST">
-    {% csrf_token %}
-    <p>Enter username</p>
-    <input type="text" id="username" name="username">
-    <p>Enter Passsword</p>
-    <input type="password" name="password" id="password">
-    <input type="submit">
-</form>
-
-<br>
-
-<h3><a href="/">Register</a></h3>
+	<h3><a href="/">Register</a></h3>
+</body>
+</html>
