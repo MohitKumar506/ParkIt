@@ -2,9 +2,11 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from .models import mapPointers
 
 # Create your views here.
 
@@ -64,18 +66,14 @@ def need(request):
     return render(request, 'need.html')
 
 def provider(request):
-    return render(request, 'provider.html')
-
-@csrf_exempt
-def save_coordinates(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        latitude = data.get('latitude')
-        longitude = data.get('longitude')
-        # Process and save the coordinates to the database or perform any other actions
-        # Example: You can use GeoDjango's functions to calculate nearby locations
-        # Replace this with your actual logic
-        # ...
-        return JsonResponse({'message': 'Coordinates saved successfully'}, status=200)
+        curr = mapPointers()
+        curr.user = request.user
+        curr.photo = request.FILES['photo']
+        curr.latitude = request.POST['latitude']
+        curr.longitude = request.POST['longitude']
+        curr.rate = request.POST['rate']
+        curr.save()
+        return HttpResponse('Data saved successfully')
     else:
-        return JsonResponse({'error': 'Invalid request method'}, status=405)
+        return render(request, 'provider.html')
