@@ -1,0 +1,79 @@
+{% if request.user.is_authenticated %}
+  <head>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th, td {
+        text-align: left;
+        padding: 18px;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      a {
+        color: blue;
+        text-decoration: none;
+      }
+      .my-marked-locations {
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        color: #333;
+        text-align: center;
+      }
+      .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .image-gallery img {
+            max-width: 10%;
+            height: auto;
+        }
+        .show {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 15px;
+            color: #333;
+            text-align: right;
+        }
+    </style>
+  </head>
+  <h1 class="container my-marked-locations">MY MARKED LOCATIONS</h1>
+  <table>
+    <tr>
+      <th>Sr. No</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Rate</th>
+      <th>photo</th>
+      <th>Delete</th>
+    </tr>
+    {% for list in lists %}
+      <tr>
+        <td><b>{{forloop.counter}}</b></td>
+        <td><b>{{list.latitude}}</b></td>
+        <td><b>{{list.longitude}}</b></td>
+        <td><b>{{list.rate}}</b></td>
+        <td><div class="image-gallery">
+            <img src="{{list.photo.url}}" alt="Photo">
+        </div></td>
+        <td><a href="{% url 'delLocation' list.id %}" class="delete-link">Delete</a></td>
+      </tr>
+    {% endfor %}
+  </table>
+  <h3>
+    <div class="container" style="text-align: right;">
+        <a href="show">Show on map</a>
+    </div>
+    <div class="container" style="text-align: left;">
+        <a href="provider">Add location</a>
+    </div>    
+    </h3>
+
+{% else %}
+  <a href="login">Login</a>
+{% endif %}
