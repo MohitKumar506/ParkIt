@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .models import mapPointers
+from .models import mapPointers, myBooking1
 
 # Create your views here.
 
@@ -87,3 +87,58 @@ def delLocation(request,pk=None):
     hw = get_object_or_404(mapPointers, id=pk)
     hw.delete()
     return redirect("pdashboard")
+
+
+def show(request):
+    lists = mapPointers.objects.filter(user = request.user.id)
+    return render(request, 'show.html',locals())
+
+def need(request):
+    lists = mapPointers.objects.all()
+    return render(request, 'need.html',locals())
+
+def myBookings(request, id):
+    try:
+        curr = get_object_or_404(mapPointers, id=id)
+        
+        new_booking = myBooking1()
+        new_booking.user = request.user
+        new_booking.name = curr.user
+        new_booking.photo = curr.photo 
+        new_booking.rate = curr.rate  
+        new_booking.latitude = curr.latitude  
+        new_booking.longitude = curr.longitude  
+        new_booking.save()
+        
+        curr.delete()
+        return redirect('need')
+    except mapPointers.DoesNotExist:
+        return redirect('need')
+
+
+def book(request):
+    lists = myBooking1.objects.filter(user = request.user)
+    return render(request,'book.html',locals())
+
+def find(request,id):
+    curr = myBooking1.objects.get(id = id)
+    latitude = curr.latitude
+    longitude = curr.longitude
+    return render(request, 'find.html',locals())
+
+def tripOver(request,id):
+    try:
+        curr = get_object_or_404(myBooking1, id=id)
+        
+        new_booking = mapPointers()
+        new_booking.user = curr.user
+        new_booking.photo = curr.photo 
+        new_booking.rate = curr.rate  
+        new_booking.latitude = curr.latitude  
+        new_booking.longitude = curr.longitude  
+        new_booking.save()
+        
+        curr.delete()
+        return redirect('book')
+    except mapPointers.DoesNotExist:
+        return redirect('book')
