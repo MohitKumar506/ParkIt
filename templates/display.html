@@ -1,0 +1,19 @@
+
+
+{% if user.is_authenticated %}
+<p>username :  {{username}}</p>
+<br>
+<a href="{% url 'logout' %}">logout</a>
+
+select your choices
+<div class="button">
+    <a class="button" href="need">Need</a>
+</div>
+<br><br>
+<div class="button">
+    <a class="button" href="provider">Need</a>
+</div>
+{% else %}
+<br><br>
+<a href="{% url 'login' %}">login</a>
+{% endif %}
