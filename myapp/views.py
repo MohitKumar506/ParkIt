@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -74,6 +74,16 @@ def provider(request):
         curr.longitude = request.POST['longitude']
         curr.rate = request.POST['rate']
         curr.save()
-        return HttpResponse('Data saved successfully')
+        return redirect('pdashboard')
     else:
         return render(request, 'provider.html')
+
+
+def pdashboard(request):
+    lists = mapPointers.objects.filter(user = request.user.id)
+    return render(request,'pdashboard.html',locals())
+
+def delLocation(request,pk=None):
+    hw = get_object_or_404(mapPointers, id=pk)
+    hw.delete()
+    return redirect("pdashboard")
