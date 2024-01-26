@@ -1,38 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Get Location Coordinates</title>
-    <script>
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
-            } else {
-                alert("Geolocation is not supported by this browser.");
-            }
+  <title>Get User Location</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    input, button, label {
+      margin: 10px 0;
+      padding: 10px;
+      width: 200px;
+      box-sizing: border-box;
+    }
+    #photoLabel {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+  <script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            alert("Geolocation is not supported by this browser.");
         }
+    }
 
-        function showPosition(position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            // Send the coordinates to the Django server using an AJAX request
-            // Example: You can use the fetch API or any other library like Axios
-            fetch('/save-coordinates/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ latitude: latitude, longitude: longitude }),
-            })
-            .then(response => {
-                // Handle the server response if needed
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+    function showPosition(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+
+        document.getElementById('latitude').value = latitude;
+        document.getElementById('longitude').value = longitude;
+    }
+
+    function formatRupees() {
+        var rupees = document.getElementById('rupees').value;
+        var formattedRupees = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(rupees);
+        document.getElementById('rupees').value = formattedRupees;
+    }
+
+    function checkRupees() {
+        var rupees = document.getElementById('rupees').value;
+        if (rupees > 100) {
+            alert("Amount in Rupees should not exceed 100.");
+            document.getElementById('rupees').value = "";
         }
-    </script>
+    }
+  </script>
 </head>
 <body>
-    <button onclick="getLocation()">Get Location</button>
+  {% if request.user.is_authenticated %}
+  <h1>Hey {{request.user.username}}, enter your details</h1>
+  <form id="locationForm" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" id="latitude" name="latitude" placeholder="Latitude" readonly required>
+    <input type="text" id="longitude" name="longitude" placeholder="Longitude" readonly required>
+    <button type="button" id="but" onclick="getLocation()">Get current Location</button>
+    <input type="file" id="photo" name="photo" accept="image/*" style="display: none;" required>
+    <label for="photo" id="photoLabel">Upload location photo</label>
+    <input type="number" id="rate" name="rate" placeholder="Charges in Rs. per day" required>
+    <input type="submit" name="initial" id="initial">
+
+    <small><a href="logout">Logout</a></small>
+  {% else %}
+  <a href="login">Login</a>
+  {% endif %}
+
+  </form>
 </body>
 </html>
