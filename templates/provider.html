@@ -1,82 +1,79 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Get User Location</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    input, button, label {
-      margin: 10px 0;
-      padding: 10px;
-      width: 200px;
-      box-sizing: border-box;
-    }
-    #photoLabel {
-      cursor: pointer;
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px;
-      border-radius: 5px;
-    }
-  </style>
-  <script>
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            alert("Geolocation is not supported by this browser.");
+{% if request.user.is_authenticated %}
+  <head>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th, td {
+        text-align: left;
+        padding: 18px;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      a {
+        color: blue;
+        text-decoration: none;
+      }
+      .my-marked-locations {
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        color: #333;
+        text-align: center;
+      }
+      .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-    }
-
-    function showPosition(position) {
-        var latitude = position.coords.latitude;
-        var longitude = position.coords.longitude;
-
-        document.getElementById('latitude').value = latitude;
-        document.getElementById('longitude').value = longitude;
-    }
-
-    function formatRupees() {
-        var rupees = document.getElementById('rupees').value;
-        var formattedRupees = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(rupees);
-        document.getElementById('rupees').value = formattedRupees;
-    }
-
-    function checkRupees() {
-        var rupees = document.getElementById('rupees').value;
-        if (rupees > 100) {
-            alert("Amount in Rupees should not exceed 100.");
-            document.getElementById('rupees').value = "";
+        .image-gallery img {
+            max-width: 10%;
+            height: auto;
         }
-    }
-  </script>
-</head>
-<body>
-  {% if request.user.is_authenticated %}
-  <h1>Hey {{request.user.username}}, enter your details</h1>
-  <form id="locationForm" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="text" id="latitude" name="latitude" placeholder="Latitude" readonly required>
-    <input type="text" id="longitude" name="longitude" placeholder="Longitude" readonly required>
-    <button type="button" id="but" onclick="getLocation()">Get current Location</button>
-    <input type="file" id="photo" name="photo" accept="image/*" style="display: none;" required>
-    <label for="photo" id="photoLabel">Upload location photo</label>
-    <input type="number" id="rate" name="rate" placeholder="Charges in Rs. per day" required>
-    <input type="submit" name="initial" id="initial">
+        .show {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 15px;
+            color: #333;
+            text-align: right;
+        }
+    </style>
+  </head>
+  <h1 class="container my-marked-locations">MY MARKED LOCATIONS</h1>
+  <table>
+    <tr>
+      <th>Sr. No</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Rate</th>
+      <th>photo</th>
+      <th>Delete</th>
+    </tr>
+    {% for list in lists %}
+      <tr>
+        <td><b>{{forloop.counter}}</b></td>
+        <td><b>{{list.latitude}}</b></td>
+        <td><b>{{list.longitude}}</b></td>
+        <td><b>{{list.rate}}</b></td>
+        <td><div class="image-gallery">
+            <img src="{{list.photo.url}}" alt="Photo">
+        </div></td>
+        <td><a href="{% url 'delLocation' list.id %}" class="delete-link">Delete</a></td>
+      </tr>
+    {% endfor %}
+  </table>
+  <h3>
+    <div class="container" style="text-align: right;">
+        <a href="show">Show on map</a>
+    </div>
+    <div class="container" style="text-align: left;">
+        <a href="provider">Add location</a>
+    </div>    
+    </h3>
 
-    <small><a href="logout">Logout</a></small>
-  {% else %}
+{% else %}
   <a href="login">Login</a>
-  {% endif %}
-
-  </form>
-</body>
-</html>
+{% endif %}
