@@ -13,7 +13,7 @@ class mapPointers(models.Model):
         return f'MapPointer {self.id} - User: {self.user.username}'
 
 
-class myBooking(models.Model):
+class myBooking1(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     latitude = models.FloatField()
