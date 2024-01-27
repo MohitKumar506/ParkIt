@@ -80,7 +80,7 @@ def provider(request):
 
 
 def pdashboard(request):
-    lists = mapPointers.objects.filter(user = request.user.id)
+    lists = mapPointers.objects.filter(user = request.user)
     return render(request,'pdashboard.html',locals())
 
 def delLocation(request,pk=None):
@@ -90,7 +90,7 @@ def delLocation(request,pk=None):
 
 
 def show(request):
-    lists = mapPointers.objects.filter(user = request.user.id)
+    lists = mapPointers.objects.filter(user = request.user)
     return render(request, 'show.html',locals())
 
 def need(request):
@@ -126,12 +126,13 @@ def find(request,id):
     longitude = curr.longitude
     return render(request, 'find.html',locals())
 
-def tripOver(request,id):
+def tripOver(request, id):
     try:
         curr = get_object_or_404(myBooking1, id=id)
         
         new_booking = mapPointers()
-        new_booking.user = curr.user
+        user_instance = User.objects.get(username=curr.name)
+        new_booking.user = user_instance  
         new_booking.photo = curr.photo 
         new_booking.rate = curr.rate  
         new_booking.latitude = curr.latitude  
