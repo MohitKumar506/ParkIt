@@ -25,8 +25,10 @@
 		}).addTo(map);
         L.Control.geocoder().addTo(map);
         {% for list in lists %} 
+        {% if list.status == False %}
         var marker = L.marker([{{list.latitude}}, {{list.longitude}}]).addTo(map);
         marker.bindPopup("Rs. {{list.rate}} per day <br> <a href='{% url 'myBookings' id=list.id %}'>Book</a>").openPopup();
+        {% endif %}
     {% endfor %}
 
       </script>

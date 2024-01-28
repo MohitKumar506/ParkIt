@@ -50,6 +50,7 @@
       <th>Longitude</th>
       <th>Rate</th>
       <th>photo</th>
+      <th>status</th>
       <th>Delete</th>
     </tr>
     {% for list in lists %}
@@ -61,7 +62,13 @@
         <td><div class="image-gallery">
             <img src="{{list.photo.url}}" alt="Photo">
         </div></td>
+        {% if list.status == False %}
+        <td><b>Empty</b></td>
         <td><a href="{% url 'delLocation' list.id %}" class="delete-link">Delete</a></td>
+        {% else %}
+        <td><b>Booked</b></td>
+        <td><b>Already booked</b></td>
+        {% endif %}
       </tr>
     {% endfor %}
   </table>

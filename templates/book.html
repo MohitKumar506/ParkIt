@@ -50,6 +50,7 @@
       <th>Longitude</th>
       <th>Rate</th>
       <th>photo</th>
+      <th>name</th>
       <th>Find way</th>
       <th>status</th>
     </tr>
@@ -62,6 +63,7 @@
         <td><div class="image-gallery">
             <img src="{{list.photo.url}}" alt="Photo">
         </div></td>
+        <td><b>{{list.name}}</b></td>
         <td><b><a href="{% url 'find' id=list.id %}">Way</a></b></td>
         <td><b><a href="{% url 'tripOver' id=list.id %}">Click if trip over</a></b></td>
 

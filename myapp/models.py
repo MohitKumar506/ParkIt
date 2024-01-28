@@ -8,6 +8,7 @@ class mapPointers(models.Model):
     longitude = models.FloatField()
     rate = models.IntegerField()
     photo = models.ImageField()
+    status = models.BooleanField(default=False)
 
     def __str__(self):
         return f'MapPointer {self.id} - User: {self.user.username}'
@@ -20,3 +21,15 @@ class myBooking1(models.Model):
     longitude = models.FloatField()
     rate = models.IntegerField()
     photo = models.ImageField()
+    var = models.IntegerField(default = 0)
+
+class Booked(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    rate = models.IntegerField()
+    photo = models.ImageField()
+    status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'MapPointer {self.id} - User: {self.user.username}'

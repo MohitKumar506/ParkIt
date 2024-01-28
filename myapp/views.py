@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .models import mapPointers, myBooking1
+from .models import mapPointers, myBooking1, Booked
 
 # Create your views here.
 
@@ -73,6 +73,7 @@ def provider(request):
         curr.latitude = request.POST['latitude']
         curr.longitude = request.POST['longitude']
         curr.rate = request.POST['rate']
+        curr.status = False
         curr.save()
         return redirect('pdashboard')
     else:
@@ -108,12 +109,14 @@ def myBookings(request, id):
         new_booking.rate = curr.rate  
         new_booking.latitude = curr.latitude  
         new_booking.longitude = curr.longitude  
+        new_booking.var = curr.id
         new_booking.save()
         
-        curr.delete()
-        return redirect('need')
+        curr.status = True 
+        curr.save() 
+        return redirect('book')
     except mapPointers.DoesNotExist:
-        return redirect('need')
+        return redirect('book')
 
 
 def book(request):
@@ -130,13 +133,13 @@ def tripOver(request, id):
     try:
         curr = get_object_or_404(myBooking1, id=id)
         
-        new_booking = mapPointers()
-        user_instance = User.objects.get(username=curr.name)
-        new_booking.user = user_instance  
+        new_booking = mapPointers(id=curr.var)
+        new_booking.user = User.objects.get(username=curr.name)
+        new_booking.status = False
         new_booking.photo = curr.photo 
         new_booking.rate = curr.rate  
         new_booking.latitude = curr.latitude  
-        new_booking.longitude = curr.longitude  
+        new_booking.longitude = curr.longitude
         new_booking.save()
         
         curr.delete()
