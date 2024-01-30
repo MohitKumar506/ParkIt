@@ -7,6 +7,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import mapPointers, myBooking1, Booked
+from django.shortcuts import render, get_object_or_404, redirect
+import uuid
+import time
 
 # Create your views here.
 
@@ -98,25 +101,25 @@ def need(request):
     lists = mapPointers.objects.all()
     return render(request, 'need.html',locals())
 
-def myBookings(request, id):
-    try:
-        curr = get_object_or_404(mapPointers, id=id)
+# def myBookings(request, id):
+#     try:
+#         curr = get_object_or_404(mapPointers, id=id)
         
-        new_booking = myBooking1()
-        new_booking.user = request.user
-        new_booking.name = curr.user
-        new_booking.photo = curr.photo 
-        new_booking.rate = curr.rate  
-        new_booking.latitude = curr.latitude  
-        new_booking.longitude = curr.longitude  
-        new_booking.var = curr.id
-        new_booking.save()
+#         new_booking = myBooking1()
+#         new_booking.user = request.user
+#         new_booking.name = curr.user
+#         new_booking.photo = curr.photo 
+#         new_booking.rate = curr.rate  
+#         new_booking.latitude = curr.latitude  
+#         new_booking.longitude = curr.longitude  
+#         new_booking.var = curr.id
+#         new_booking.save()
         
-        curr.status = True 
-        curr.save() 
-        return redirect('book')
-    except mapPointers.DoesNotExist:
-        return redirect('book')
+#         curr.status = True 
+#         curr.save() 
+#         return redirect('book')
+#     except mapPointers.DoesNotExist:
+#         return redirect('book')
 
 
 def book(request):
@@ -146,3 +149,33 @@ def tripOver(request, id):
         return redirect('book')
     except mapPointers.DoesNotExist:
         return redirect('book')
+
+def payment(request):
+    return render(request, 'payment.html')
+
+def myBookings(request, id):
+    try:
+        curr = get_object_or_404(mapPointers, id=id)
+        
+        new_booking = myBooking1()
+        new_booking.user = request.user
+        new_booking.name = curr.user
+        new_booking.photo = curr.photo 
+        new_booking.rate = curr.rate  
+        new_booking.latitude = curr.latitude  
+        new_booking.longitude = curr.longitude  
+        new_booking.var = curr.id
+        new_booking.save()
+        
+        curr.status = True 
+        curr.save()   
+        return redirect('payment')
+    except mapPointers.DoesNotExist:
+        return redirect('book')
+
+
+def redirecting(request):
+    return render(request, 'redirecting.html')
+
+def confirmed(request):
+    return render(request, 'confirmed.html')
