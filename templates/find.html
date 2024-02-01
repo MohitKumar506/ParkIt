@@ -30,15 +30,10 @@
 
         var marker = L.marker([{{latitude}}, {{longitude}}]).addTo(map);
         marker.bindPopup("Route to follow").openPopup();
-        {% comment %} setTimeout(function () {
-          marker.closePopup();
-      }, 5000); {% endcomment %}
 
-        // Get user's current location using Geolocation API
         navigator.geolocation.getCurrentPosition(function (position) {
             var userLatLng = L.latLng(position.coords.latitude, position.coords.longitude);
 
-            // Set the starting point to the user's current location
             map.setView(userLatLng, 11);
             marker.setLatLng(userLatLng);
 
