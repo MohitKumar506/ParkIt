@@ -77,6 +77,7 @@ def provider(request):
         curr.longitude = request.POST['longitude']
         curr.rate = request.POST['rate']
         curr.status = False
+        curr.email = request.POST['Email']
         curr.save()
         return redirect('pdashboard')
     else:
@@ -165,6 +166,7 @@ def myBookings(request, id):
         new_booking.latitude = curr.latitude  
         new_booking.longitude = curr.longitude  
         new_booking.var = curr.id
+        new_booking.email = curr.email
         new_booking.save()
         
         curr.status = True 
@@ -179,3 +181,4 @@ def redirecting(request):
 
 def confirmed(request):
     return render(request, 'confirmed.html')
+

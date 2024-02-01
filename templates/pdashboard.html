@@ -49,6 +49,7 @@
       <th>Latitude</th>
       <th>Longitude</th>
       <th>Rate</th>
+      {% comment %} <th>Email</th> {% endcomment %}
       <th>photo</th>
       <th>status</th>
       <th>Delete</th>
@@ -59,6 +60,7 @@
         <td><b>{{list.latitude}}</b></td>
         <td><b>{{list.longitude}}</b></td>
         <td><b>{{list.rate}}</b></td>
+        {% comment %} <td><b>{{list.email}}</b></td> {% endcomment %}
         <td><div class="image-gallery">
             <img src="{{list.photo.url}}" alt="Photo">
         </div></td>

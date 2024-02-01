@@ -9,6 +9,7 @@ class mapPointers(models.Model):
     rate = models.IntegerField()
     photo = models.ImageField()
     status = models.BooleanField(default=False)
+    email = models.EmailField(default = "megh.shah2003@gmail.com",max_length=254)
 
     def __str__(self):
         return f'MapPointer {self.id} - User: {self.user.username}'
@@ -22,6 +23,8 @@ class myBooking1(models.Model):
     rate = models.IntegerField()
     photo = models.ImageField()
     var = models.IntegerField(default = 0)
+    email = models.EmailField(default = "megh.shah2003@gmail.com",max_length=254)
+
 
 class Booked(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -31,5 +34,12 @@ class Booked(models.Model):
     photo = models.ImageField()
     status = models.BooleanField(default=False)
 
+
     def __str__(self):
         return f'MapPointer {self.id} - User: {self.user.username}'
+
+class Chat(models.Model):
+    sender = models.ForeignKey(User, related_name='sender', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='receiver', on_delete=models.CASCADE)
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)

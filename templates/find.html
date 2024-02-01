@@ -1,36 +1,66 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Leaflet Map</title>
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <title>Geolocation</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
     <style>
-		#map {
-			height: 500px;
-		}
-	</style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
 </head>
+
 <body>
-	<div id="map"></div>
+    <div id="map" style="width:100%; height: 100vh"></div>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
-	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+..."></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder@1.13.0/dist/Control.Geocoder.js"></script>
     <script>
-        var map = L.map('map').setView([currentLatitude, currentLongitude], 13);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-            maxZoom: 18,
+        var map = L.map('map').setView([{{latitude}}, {{longitude}}], 11);
+        mapLink = "<a href='http://openstreetmap.org'>OpenStreetMap</a>";
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: 'Leaflet &copy; ' + mapLink + ', contribution',
+            maxZoom: 18
         }).addTo(map);
 
-        var destination = L.latLng(destinationLatitude, destinationLongitude);
+        var marker = L.marker([{{latitude}}, {{longitude}}]).addTo(map);
+        marker.bindPopup("Route to follow").openPopup();
+        {% comment %} setTimeout(function () {
+          marker.closePopup();
+      }, 5000); {% endcomment %}
 
-        L.Routing.control({
-            waypoints: [
-                L.latLng(currentLatitude, currentLongitude),
-                destination
-            ]
-        }).addTo(map);
+        // Get user's current location using Geolocation API
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var userLatLng = L.latLng(position.coords.latitude, position.coords.longitude);
+
+            // Set the starting point to the user's current location
+            map.setView(userLatLng, 11);
+            marker.setLatLng(userLatLng);
+
+            L.Routing.control({
+                waypoints: [
+                    userLatLng,
+                    L.latLng({{latitude}}, {{longitude}})
+                ]
+            }).on('routesfound', function (e) {
+                var routes = e.routes;
+                console.log(routes);
+
+                e.routes[0].coordinates.forEach(function (coord, index) {
+                    setTimeout(function () {
+                        marker.setLatLng([coord.lat, coord.lng]);
+                    }, 100 * index)
+                })
+
+            }).addTo(map);
+        });
+
     </script>
 </body>
+
 </html>
