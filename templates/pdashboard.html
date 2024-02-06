@@ -50,7 +50,8 @@
       <th>Longitude</th>
       <th>Rate</th>
       {% comment %} <th>Email</th> {% endcomment %}
-      <th>photo</th>
+      <th>Photo</th>
+      <th>Booked by</th>
       <th>status</th>
       <th>Delete</th>
     </tr>
@@ -64,6 +65,11 @@
         <td><div class="image-gallery">
             <img src="{{list.photo.url}}" alt="Photo">
         </div></td>
+        {% if list.booked_by != "empty" %}
+        <td><b>{{list.booked_by}}</b></td>
+        {% else %}
+        <td><b style="color: red;">{{list.booked_by}}</b></td>
+        {% endif %}
         {% if list.status == False %}
         <td><b>Empty</b></td>
         <td><a href="{% url 'delLocation' list.id %}" class="delete-link">Delete</a></td>

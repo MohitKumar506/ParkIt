@@ -9,6 +9,7 @@ class mapPointers(models.Model):
     rate = models.IntegerField()
     photo = models.ImageField()
     status = models.BooleanField(default=False)
+    booked_by = models.CharField(default="empty", max_length=500)
     email = models.EmailField(default = "megh.shah2003@gmail.com",max_length=254)
 
     def __str__(self):

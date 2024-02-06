@@ -144,6 +144,7 @@ def tripOver(request, id):
         new_booking.rate = curr.rate  
         new_booking.latitude = curr.latitude  
         new_booking.longitude = curr.longitude
+        new_booking.booked_by = "empty"
         new_booking.save()
         
         curr.delete()
@@ -170,6 +171,7 @@ def myBookings(request, id):
         new_booking.save()
         
         curr.status = True 
+        curr.booked_by = request.user.username
         curr.save()   
         return redirect('payment')
     except mapPointers.DoesNotExist:
