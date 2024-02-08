@@ -77,7 +77,7 @@ def provider(request):
         curr.longitude = request.POST['longitude']
         curr.rate = request.POST['rate']
         curr.status = False
-        curr.email = request.POST['Email']
+        curr.email = request.user.email
         curr.save()
         return redirect('pdashboard')
     else:
@@ -172,6 +172,7 @@ def myBookings(request, id):
         
         curr.status = True 
         curr.booked_by = request.user.username
+        curr.Booked_email = request.user.email
         curr.save()   
         return redirect('payment')
     except mapPointers.DoesNotExist:

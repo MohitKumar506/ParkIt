@@ -11,6 +11,7 @@ class mapPointers(models.Model):
     status = models.BooleanField(default=False)
     booked_by = models.CharField(default="empty", max_length=500)
     email = models.EmailField(default = "megh.shah2003@gmail.com",max_length=254)
+    Booked_email = models.EmailField(default = "sample@gmail.com",max_length=254)
 
     def __str__(self):
         return f'MapPointer {self.id} - User: {self.user.username}'

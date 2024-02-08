@@ -52,6 +52,7 @@
       {% comment %} <th>Email</th> {% endcomment %}
       <th>Photo</th>
       <th>Booked by</th>
+      <th>Contact</th>
       <th>status</th>
       <th>Delete</th>
     </tr>
@@ -67,6 +68,12 @@
         </div></td>
         {% if list.booked_by != "empty" %}
         <td><b>{{list.booked_by}}</b></td>
+        {% else %}
+        <td><b style="color: red;">{{list.booked_by}}</b></td>
+        {% endif %}
+        {% if list.booked_by != "empty" %}
+        {% comment %} <td><b>{{list.booked_by}}</b></td> {% endcomment %}
+        <td><b><a href="mailto:{{list.Booked_email}}">email</a></b></td>
         {% else %}
         <td><b style="color: red;">{{list.booked_by}}</b></td>
         {% endif %}
