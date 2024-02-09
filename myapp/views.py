@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .models import mapPointers, myBooking1, Booked
+from .models import mapPointers, myBooking1, Booked, Earning
 from django.shortcuts import render, get_object_or_404, redirect
 import uuid
 import time
@@ -30,8 +30,8 @@ def register(request):
                 return redirect('register')
             else:
                 user = User.objects.create_user(username=username, email=email, password=password)
-                user.save();
-                return redirect('register')
+                Earning.objects.create(user=user, earning=0)
+                return redirect('login')
         else:
             messages.info(request, 'password not same')
             return redirect('register')
@@ -86,6 +86,7 @@ def provider(request):
 
 def pdashboard(request):
     lists = mapPointers.objects.filter(user = request.user)
+    earn = Earning.objects.get(user = request.user)
     return render(request,'pdashboard.html',locals())
 
 def delLocation(request,pk=None):
@@ -169,6 +170,10 @@ def myBookings(request, id):
         new_booking.var = curr.id
         new_booking.email = curr.email
         new_booking.save()
+
+        earn = Earning.objects.get(user = curr.user)
+        earn.earning += curr.rate
+        earn.save()
         
         curr.status = True 
         curr.booked_by = request.user.username

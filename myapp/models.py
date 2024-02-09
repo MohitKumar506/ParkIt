@@ -45,3 +45,8 @@ class Chat(models.Model):
     receiver = models.ForeignKey(User, related_name='receiver', on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class Earning(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    earning = models.IntegerField(default=0)
