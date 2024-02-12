@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0px;
+    }
+    .container1 {
+     max-width: 1200px;
+     margin: 0 auto;
+     padding: 5px;
+     font-size: xx-large;
+     margin-bottom: 0px; 
+}
+    h1, h3 {
+      text-align: center;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .image-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .image-gallery img {
+      max-width: 100px;
+      height: auto;
+    }
+    .logout-btn {
+      display: block;
+      margin: 20px auto;
+      background-color: #d43232;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .direct-btn {
+      float: right;
+      margin-top: 0px;
+      margin-right: 20px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+{% if request.user.is_authenticated %}
+<div class="container1">
+    <p>Welcome {{user}}</p>
+    <form action="{% url 'display' %}" method="post" style="text-align: center;">
+        {% csrf_token %}
+        <button type="submit" class="direct-btn">Provide / Rent</button>
+    </form>
+</div>
+<div class="container">
+  <h1>My Marked Locations</h1>
+  <table>
+    <tr>
+      <th>Sr. No</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Rate</th>
+      <th>Photo</th>
+      <th>Booked by</th>
+      <th>Contact</th>
+      <th>Status</th>
+      <th>Delete</th>
+    </tr>
+    {% for item in myBookings %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ item.latitude|floatformat:3 }}...</td> 
+        <td>{{ item.longitude|floatformat:3 }}...</td>
+        <td>{{ item.rate }}</td>
+        <td>
+          <div class="image-gallery">
+            <img src="{{ item.photo.url }}" alt="Photo">
+          </div>
+        </td>
+        <td>{% if item.booked_by != "empty" %}{{ item.booked_by }}{% else %}<span style="color: red;">{{ item.booked_by }}</span>{% endif %}</td>
+        <td>{% if item.booked_by != "empty" %}<a href="mailto:{{ item.Booked_email }}">email</a>{% else %}<span style="color: red;">{{ item.booked_by }}</span>{% endif %}</td>
+        {% if item.status == False %}
+        <td><b>Empty</b></td>
+        <td><a href="{% url 'delLocation' item.id %}" class="delete-link">Delete</a></td>
+        {% else %}
+        <td>Booked</td>
+        <td>Already booked</td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+<br>
+  <div style="text-align: right;">
+    <a href="{% url 'profileShow' %}"><b>Show on map</b></a>
+  </div>
+
+  <h3 style="color: #007bff; font-size: larger;"><b>Total Earnings: Rs {{ earn.earning }}</b></h3>
+</div>
+<br><br><br>
+<div class="container">
+  <h1>My Bookings</h1>
+  <table>
+    <tr>
+      <th>Sr. No</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Rate</th>
+      <th>Photo</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Find Way</th>
+      <th>Status</th>
+    </tr>
+    {% for item in booked %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ item.latitude|floatformat:3 }}...</td>
+        <td>{{ item.longitude|floatformat:3 }}...</td>
+        <td>{{ item.rate }}</td>
+        <td>
+          <div class="image-gallery">
+            <img src="{{ item.photo.url }}" alt="Photo">
+          </div>
+        </td>
+        <td>{{ item.name }}</td>
+        <td><a href="mailto:{{ item.email }}">Contact</a></td>
+        <td><a href="{% url 'find' id=item.id %}">Way</a></td>
+        <td><a href="{% url 'tripOver' id=item.id %}">Click if trip over</a></td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+<br><br><br>
+<div class="container">
+  <h1>Booking History</h1>
+  <table>
+    <tr>
+      <th>Sr. No</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Rate</th>
+      <th>Owner</th>
+    </tr>
+    {% for item in past %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ item.latitude|floatformat:3 }}...</td> 
+        <td>{{ item.longitude|floatformat:3 }}...</td>
+        <td>{{ item.rate }}</td>
+        <td>{{ item.name }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+
+<form action="{% url 'logout' %}" method="post" style="text-align: center;">
+  {% csrf_token %}
+  <button type="submit" class="logout-btn">Logout</button>
+</form>
+
+{% else %}
+  <div class="container">
+    <a href="{% url 'login' %}">Login</a>
+  </div>
+{% endif %}
+
+</body>
+</html>

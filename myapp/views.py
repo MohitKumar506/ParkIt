@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .models import mapPointers, myBooking1, Booked, Earning
+from .models import mapPointers, myBooking1, Booked, Earning, Previous
 from django.shortcuts import render, get_object_or_404, redirect
 import uuid
 import time
@@ -63,6 +63,7 @@ def logout(request):
     return redirect('login')
 
 def display(request):
+    user = request.user
     return render(request, 'display.html')
 
 def need(request):
@@ -92,7 +93,7 @@ def pdashboard(request):
 def delLocation(request,pk=None):
     hw = get_object_or_404(mapPointers, id=pk)
     hw.delete()
-    return redirect("pdashboard")
+    return redirect("profile")
 
 
 def show(request):
@@ -147,6 +148,16 @@ def tripOver(request, id):
         new_booking.longitude = curr.longitude
         new_booking.booked_by = "empty"
         new_booking.save()
+
+        past = Previous()
+        past.user = request.user
+        past.name = User.objects.get(username=curr.name)
+        past.latitude = curr.latitude  
+        past.longitude = curr.longitude
+        past.rate = curr.rate
+
+        past.save()
+        
         
         curr.delete()
         return redirect('book')
@@ -190,3 +201,17 @@ def redirecting(request):
 def confirmed(request):
     return render(request, 'confirmed.html')
 
+def profile(request):
+    booked = myBooking1.objects.filter(user = request.user)
+    myBookings = mapPointers.objects.filter(user = request.user)
+    earn = Earning.objects.get(user = request.user)
+    user = request.user
+    try:
+        past = Previous.objects.filter(user=request.user)
+    except Previous.DoesNotExist:
+        past = None
+    return render(request, 'profile.html',locals())
+
+def profileShow(request):
+    lists = mapPointers.objects.filter(user = request.user)
+    return render(request, 'profileShow.html',locals())

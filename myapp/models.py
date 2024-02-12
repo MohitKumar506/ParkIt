@@ -50,3 +50,12 @@ class Chat(models.Model):
 class Earning(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     earning = models.IntegerField(default=0)
+
+
+class Previous(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    rate = models.IntegerField()
+    
