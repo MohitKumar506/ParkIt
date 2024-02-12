@@ -1,59 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Login Here</title>
-	<style>
-	    h4 {
-	        color: red;
-	    }
-	    form {
-	        margin: 0 auto;
-	        width: 50%;
-	        padding: 20px;
-	        border: 1px solid #ccc;
-	    }
-	    form p {
-	        text-align: center;
-	    }
-	    form input[type="text"],
-	    form input[type="email"],
-	    form input[type="password"] {
-	        width: 100%;
-	        padding: 10px;
-	        margin: 10px 0;
-	        box-sizing: border-box;
-	    }
-	    form input[type="submit"] {
-	        background-color: #4CAF50;
-	        color: white;
-	        padding: 10px;
-	        border: none;
-	        cursor: pointer;
-	        width: 100%;
-	    }
-	    h3 {
-	        text-align: center;
-	    }
-	</style>
+    <title>Login Here</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h4 {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        form {
+            margin: 0 auto;
+            width: 50%;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        form p {
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
+
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        form input[type="submit"] {
+            background-color: #2ecc71;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #27ae60;
+        }
+
+        h3 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        h3 a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        h3 a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-	<h1>Login Here</h1>
+    <h1>Login Here</h1>
 
-	{% for message in messages %}
-		<h4>{{message}}</h4>
-	{% endfor %}
+    {% for message in messages %}
+        <h4>{{ message }}</h4>
+    {% endfor %}
 
-	<form action="" method="POST">
-	    {% csrf_token %}
-	    <p>Enter username</p>
-	    <input type="text" id="username" name="username">
-	    <p>Enter Passsword</p>
-	    <input type="password" name="password" id="password">
-	    <input type="submit">
-	</form>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <p>Enter Username</p>
+        <input type="text" id="username" name="username" placeholder="Your username">
+        <p>Enter Password</p>
+        <input type="password" name="password" id="password" placeholder="Your password">
+        <input type="submit" value="Login">
+    </form>
 
-	<br>
-
-	<h3><a href="/">Register</a></h3>
+    <h3>Don't have an account? <a href="/">Register here</a></h3>
 </body>
 </html>

@@ -93,7 +93,7 @@
     <a href="{% url 'display' %}" class="active">Home</a>
     <a href="{% url 'profile' %}">Profile</a>
     <div class="navbar-right">
-    <a href="{% url 'provider' %}"><b>My Bookings</b></a>
+    <a href="{% url 'provider' %}"><b>Add location</b></a>
     <a href="{% url 'logout' %}"><small>Logout</small></a>
     </div>
 </div>
@@ -144,10 +144,10 @@
   </table>
   <h3>
     <div class="container" style="text-align: right;">
-        <a href="show">Show on map</a>
+        <a href="{% url 'show' %}">Show on map</a>
     </div>
-    <div class="container" style="text-align: left;">
-        <a href="provider">Add location</a>
+    <!-- <div class="container" style="text-align: left;">
+        <a href="provider">Add location</a> -->
     </div>    
     </h3>
     <h3 style="font-family: Arial, sans-serif; font-size: 20px; color: #007bff; text-align: center; margin-top: 20px;">
