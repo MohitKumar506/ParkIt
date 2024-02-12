@@ -87,12 +87,13 @@
 
 {% if request.user.is_authenticated %}
 <div class="container1">
-    <p>Welcome {{user}}</p>
+    <p>Welcome, {{user}}</p>
     <form action="{% url 'display' %}" method="post" style="text-align: center;">
         {% csrf_token %}
         <button type="submit" class="direct-btn">Provide / Rent</button>
     </form>
 </div>
+<br>
 <div class="container">
   <h1>My Marked Locations</h1>
   <table>
