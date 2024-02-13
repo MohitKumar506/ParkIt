@@ -15,6 +15,7 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 0px;
+      position: relative;
     }
     .container1 {
      max-width: 1200px;
@@ -58,17 +59,29 @@
       max-width: 100px;
       height: auto;
     }
-    .logout-btn {
-      display: block;
-      margin: 20px auto;
-      background-color: #d43232;
-      color: #fff;
-      border: none;
+    .logout-container {
+      text-align: center;
+      width: 100%;
+      position: absolute;
+      bottom: 0; 
+      left: 0; 
+      background-color: #f8f9fa;
+      padding: 20px 0; 
+      box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); 
+  }
+
+  .logout-button {
       padding: 10px 20px;
+      background-color: #ff6347;
+      color: white;
+      text-align: center;
+      text-decoration: none;
       font-size: 16px;
+      margin: 4px 2px;
       cursor: pointer;
       border-radius: 5px;
-    }
+      transition: background-color 0.3s;
+  }
     .direct-btn {
       float: right;
       margin-top: 0px;
@@ -81,130 +94,181 @@
       cursor: pointer;
       border-radius: 5px;
     }
+    .options {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    .option-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      border: none;
+    }
+    .option-btn.active {
+      background-color: #2407ca;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
-
-{% if request.user.is_authenticated %}
-<div class="container1">
+  <div class="container1">
     <p>Welcome, {{user}}</p>
     <form action="{% url 'display' %}" method="post" style="text-align: center;">
         {% csrf_token %}
         <button type="submit" class="direct-btn">Provide / Rent</button>
     </form>
-</div>
-<br>
-<div class="container">
-  <h1>My Marked Locations</h1>
-  <table>
-    <tr>
-      <th>Sr. No</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Rate</th>
-      <th>Photo</th>
-      <th>Booked by</th>
-      <th>Contact</th>
-      <th>Status</th>
-      <th>Delete</th>
-    </tr>
-    {% for item in myBookings %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ item.latitude|floatformat:3 }}...</td> 
-        <td>{{ item.longitude|floatformat:3 }}...</td>
-        <td>{{ item.rate }}</td>
-        <td>
-          <div class="image-gallery">
-            <img src="{{ item.photo.url }}" alt="Photo">
-          </div>
-        </td>
-        <td>{% if item.booked_by != "empty" %}{{ item.booked_by }}{% else %}<span style="color: red;">{{ item.booked_by }}</span>{% endif %}</td>
-        <td>{% if item.booked_by != "empty" %}<a href="mailto:{{ item.Booked_email }}">email</a>{% else %}<span style="color: red;">{{ item.booked_by }}</span>{% endif %}</td>
-        {% if item.status == False %}
-        <td><b>Empty</b></td>
-        <td><a href="{% url 'delLocation' item.id %}" class="delete-link">Delete</a></td>
-        {% else %}
-        <td>Booked</td>
-        <td>Already booked</td>
-        {% endif %}
-      </tr>
-    {% endfor %}
-  </table>
-<br>
-  <div style="text-align: right;">
-    <a href="{% url 'profileShow' %}"><b>Show on map</b></a>
   </div>
-
-  <h3 style="color: #007bff; font-size: larger;"><b>Total Earnings: Rs {{ earn.earning }}</b></h3>
-</div>
-<br><br><br>
-<div class="container">
-  <h1>My Bookings</h1>
-  <table>
-    <tr>
-      <th>Sr. No</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Rate</th>
-      <th>Photo</th>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Find Way</th>
-      <th>Status</th>
-    </tr>
-    {% for item in booked %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ item.latitude|floatformat:3 }}...</td>
-        <td>{{ item.longitude|floatformat:3 }}...</td>
-        <td>{{ item.rate }}</td>
-        <td>
-          <div class="image-gallery">
-            <img src="{{ item.photo.url }}" alt="Photo">
-          </div>
-        </td>
-        <td>{{ item.name }}</td>
-        <td><a href="mailto:{{ item.email }}">Contact</a></td>
-        <td><a href="{% url 'find' id=item.id %}">Way</a></td>
-        <td><a href="{% url 'tripOver' id=item.id %}">Click if trip over</a></td>
-      </tr>
-    {% endfor %}
-  </table>
-</div>
-<br><br><br>
-<div class="container">
-  <h1>Booking History</h1>
-  <table>
-    <tr>
-      <th>Sr. No</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Rate</th>
-      <th>Owner</th>
-    </tr>
-    {% for item in past %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ item.latitude|floatformat:3 }}...</td> 
-        <td>{{ item.longitude|floatformat:3 }}...</td>
-        <td>{{ item.rate }}</td>
-        <td>{{ item.name }}</td>
-      </tr>
-    {% endfor %}
-  </table>
-</div>
-
-<form action="{% url 'logout' %}" method="post" style="text-align: center;">
-  {% csrf_token %}
-  <button type="submit" class="logout-btn">Logout</button>
-</form>
-
-{% else %}
+  <br><br><br>
   <div class="container">
-    <a href="{% url 'login' %}">Login</a>
-  </div>
-{% endif %}
+    <div class="options">
+      <button class="option-btn active" onclick="showTable('marked', this)">My Marked Locations</button>
+      <button class="option-btn" onclick="showTable('bookings', this)">My Bookings</button>
+      <button class="option-btn" onclick="showTable('history', this)">Booking History</button>
+    </div>
+    <div id="h1" style="text-align: right; display: block;">
+        <h1>My Marked Locations</h1>
+    </div>
+    <div id="h2" style="text-align: right; display: none;">
+      <h1>My Bookings</h1>
+    </div>
+    <div id="h3" style="text-align: right; display: none;">
+      <h1>Booking History</h1>
+    </div>
+    <table id="marked-locations">
+      <tr>
+        <th>Sr. No</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>Rate</th>
+        <th>Photo</th>
+        <th>Booked by</th>
+        <th>Contact</th>
+        <th>Status</th>
+        <th>Delete</th>
+      </tr>
+      {% for item in myBookings %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ item.latitude|floatformat:3 }}...</td> 
+          <td>{{ item.longitude|floatformat:3 }}...</td>
+          <td>{{ item.rate }}</td>
+          <td>
+            <div class="image-gallery">
+              <img src="{{ item.photo.url }}" alt="Photo">
+            </div>
+          </td>
+          <td>{% if item.booked_by != "empty" %}{{ item.booked_by }}{% else %}<span style="color: red;">{{ item.booked_by }}</span>{% endif %}</td>
+          <td>{% if item.booked_by != "empty" %}<a href="mailto:{{ item.Booked_email }}">email</a>{% else %}<span style="color: red;">{{ item.booked_by }}</span>{% endif %}</td>
+          {% if item.status == False %}
+          <td><b>Empty</b></td>
+          <td><a href="{% url 'delLocation' item.id %}" class="delete-link">Delete</a></td>
+          {% else %}
+          <td>Booked</td>
+          <td>Already booked</td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </table>
+    <div id="map-earnings-section" style="text-align: right;">
+      <br>
+      <a href="{% url 'profileShow' %}"><b>Show on map</b></a>
+      <h3 style="color: #007bff; font-size: larger;"><b>Total Earnings: Rs {{ earn.earning }}</b></h3>
+    </div>
+    <table id="bookings" style="display:none;">
+      <tr>
+        <th>Sr. No</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>Rate</th>
+        <th>Photo</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Find Way</th>
+        <th>Status</th>
+      </tr>
+      {% for item in booked %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ item.latitude|floatformat:3 }}...</td>
+          <td>{{ item.longitude|floatformat:3 }}...</td>
+          <td>{{ item.rate }}</td>
+          <td>
+            <div class="image-gallery">
+              <img src="{{ item.photo.url }}" alt="Photo">
+            </div>
+          </td>
+          <td>{{ item.name }}</td>
+          <td><a href="mailto:{{ item.email }}">Contact</a></td>
+          <td><a href="{% url 'find' id=item.id %}">Way</a></td>
+          <td><a href="{% url 'tripOver' id=item.id %}">Click if trip over</a></td>
+        </tr>
+      {% endfor %}
+    </table>
+    <table id="history" style="display:none;">
+       <tr>
+        <th>Sr. No</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>Rate</th>
+        <th>Owner</th>
+      </tr>
+      {% for item in past %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ item.latitude|floatformat:3 }}...</td> 
+          <td>{{ item.longitude|floatformat:3 }}...</td>
+          <td>{{ item.rate }}</td>
+          <td>{{ item.name }}</td>
+        </tr>
+      {% endfor %}
+      </table>
+    </div>
+    <div class="logout-container">
+      <a href="{% url 'logout' %}" class="logout-button">Logout</a>
+    </div>
+    <script>
+      function showTable(option, button) {
+        var markedLocations = document.getElementById("marked-locations");
+        var bookings = document.getElementById("bookings");
+        var history = document.getElementById("history");
+        var mapEarningsSection = document.getElementById("map-earnings-section");
+        var h1 = document.getElementById("h1");
+        var h2 = document.getElementById("h2");
+        var h3 = document.getElementById("h3");
 
+        markedLocations.style.display = "none";
+        bookings.style.display = "none";
+        history.style.display = "none";
+        h1.style.display = "none";
+        h2.style.display = "none";
+        h3.style.display = "none";
+
+        var buttons = document.getElementsByClassName("option-btn");
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].classList.remove("active");
+        }
+
+        if (option === "marked") {
+          markedLocations.style.display = "table";
+          mapEarningsSection.style.display = "block";
+          h1.style.display = "block";
+          mapEarningsSection.style.display = "block";
+        } else if (option === "bookings") {
+          bookings.style.display = "table";
+          h2.style.display = "block";
+          mapEarningsSection.style.display = "none";
+        } else if (option === "history") {
+          history.style.display = "table";
+          h3.style.display = "block";
+          mapEarningsSection.style.display = "none";
+        }
+
+
+        button.classList.add("active");
+      }
+    </script>
 </body>
 </html>

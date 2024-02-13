@@ -19,7 +19,7 @@
             width: 100%;
             position: fixed;
             top: 0;
-            z-index: 1000; /* Ensure the navbar is above other content */
+            z-index: 1000; 
         }
 
         .navbar a {
@@ -31,7 +31,7 @@
             text-decoration: none;
             font-size: 17px;
             transition: background-color 0.3s;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; /* Update font-family */
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
         }
 
         .navbar a:hover {
@@ -48,7 +48,7 @@
             text-decoration: none;
             font-size: 20px;
             font-weight: bold;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; /* Update font-family */
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
         }
 
         .navbar a.active {
@@ -64,7 +64,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; /* Update font-family */
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
         }
 
         .right-half {
@@ -74,7 +74,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; /* Update font-family */
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
         }
 
         .button-container {
@@ -98,11 +98,11 @@
         }
 
         .left-half .button {
-            background-color: #4CAF50; /* Green */
+            background-color: #4CAF50; 
         }
 
         .right-half .button {
-            background-color: #008CBA; /* Blue */
+            background-color: #008CBA; 
         }
 
         .button:hover {
@@ -110,24 +110,23 @@
             color: black;
         }
 
-        /* Additional styling for text */
         .text-left {
             margin-top: 10px;
             width: 30%; 
-            color: #006e04; /* Adjust text color for better readability */
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; /* Update font-family */
+            color: #006e04; 
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
         }
         .text-right {
             margin-top: 10px;
             width: 30%; 
-            color: #003494  ; /* Adjust text color for better readability */
-            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; /* Update font-family */
+            color: #003494  ; 
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
         }
         .logout-container {
             text-align: center;
             width: 100%;
             position: absolute;
-            bottom: 20px; /* Adjust this value to control the distance from the bottom */
+            bottom: 20px; 
         }
 
         .logout-button {
@@ -154,7 +153,6 @@
 <body>
     <div class="navbar">
         <a href="#" class="navbar-brand">WheelOS</a>
-        <!-- Add other navbar links as needed -->
         <a href="{% url 'display' %}" class="active">Home</a>
         <!-- <h1>Welcome {{user}}</h1> -->
         <div class="navbar-right">
@@ -163,26 +161,21 @@
         </div>
     </div>
     <div class="left-half">
-
-        <!-- Content for the left half -->
         <div class="button-container">
             <a href="{% url 'need' %}" class="button" style="font-size: large;"><b>Rent</b></a>
         </div>
         <div class="text-left">
             <h2 style="text-align: center;">Rent out parking</h2>
             <p style="text-align: center;">Want to park your vehicle, rent out the place for hassle-free experience</p>
-            <!-- Add any additional content here -->
         </div>
     </div>
     <div class="right-half">
-        <!-- Content for the right half -->
         <div class="button-container">
             <a href="{% url 'provider' %}" class="button" style="font-size: large;"><b>Provide</b></a>
         </div>
         <div class="text-right">
             <h2 style="text-align: center;">Provide your space</h2>
             <p style="text-align: center;">Have your parking space empty, rent it out!!</p>
-            <!-- Add any additional content here -->
         </div>
     </div>
     <div class="logout-container">

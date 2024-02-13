@@ -160,7 +160,7 @@ def tripOver(request, id):
         
         
         curr.delete()
-        return redirect('need')
+        return redirect('book')
     except mapPointers.DoesNotExist:
         return redirect('book')
 
