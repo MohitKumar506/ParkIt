@@ -97,7 +97,10 @@
 
     <form action="" method="POST">
         {% csrf_token %}
-        <p>Enter Username</p>
+        <p>Enter Username
+            <br>
+        <small><small>As per Aadhar card or Driving License</small></small>
+        </p>
         <input type="text" id="username" name="username">
         <p>Enter Email</p>
         <input type="email" id="email" name="email">

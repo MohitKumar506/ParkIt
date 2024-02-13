@@ -10,6 +10,8 @@ from .models import mapPointers, myBooking1, Booked, Earning, Previous
 from django.shortcuts import render, get_object_or_404, redirect
 import uuid
 import time
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 # Create your views here.
 
@@ -190,9 +192,30 @@ def myBookings(request, id):
         curr.booked_by = request.user.username
         curr.Booked_email = request.user.email
         curr.save()   
+
+        confirmParker(request.user.email, curr)
+        confirmProvider(curr.email, curr, request.user.username)
+
         return redirect('payment')
     except mapPointers.DoesNotExist:
         return redirect('book')
+
+def confirmParker(user_email, curr):
+    subject = 'Parking Booking Confirmation'
+    context = {'booking_details': curr}
+    message = render_to_string('confirmParker.html', context)
+    sender_email = 'team.wheelos@gmail.com'
+    send_mail(subject, message, sender_email, [user_email])
+
+
+def confirmProvider(user, curr, username):
+    subject = 'Parking Booking Confirmation'
+    context = {'curr': curr,
+                'username':username,    
+            }
+    message = render_to_string('confirmProvider.html', context)
+    sender_email = 'team.wheelos@gmail.com'
+    send_mail(subject, message, sender_email, [user])
 
 
 def redirecting(request):
