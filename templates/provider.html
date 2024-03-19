@@ -78,6 +78,10 @@
           float: right;
           margin-right: 40px;
       }
+      /* input[type="file"] {
+      position: absolute;
+      left: -9999px;
+      } */
       
   </style>
   <script>
@@ -129,16 +133,62 @@
   {% comment %} <div class = "dashboard">
     <h3><a href="pdashboard">Dashboard</a></h3>
   </div> {% endcomment %}
-  <h1>Hey {{request.user.username}}, enter your details</h1>
+  <h1>Hey {{ request.user.username }}, enter your details</h1>
   <form id="locationForm" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="text" id="latitude" name="latitude" placeholder="Latitude" readonly required>
-    <input type="text" id="longitude" name="longitude" placeholder="Longitude" readonly required>
+    <input type="text" id="latitude" name="latitude" placeholder="Latitude" required readonly>
+    <input type="text" id="longitude" name="longitude" placeholder="Longitude" required readonly>
     <button type="button" id="but" onclick="getLocation()">Get current Location</button>
-    <input type="file" id="photo" name="photo" accept="image/*" style="display: none;" required>
-    <label for="photo" id="photoLabel">Upload location photo</label>
+    <input type="file" id="photo" name="photo" accept="image/*" style="display: none;" required onchange="previewImage(event)" >
+    <label for="photo" id="photoLabel" style="cursor: pointer;">Upload location photo</label>
+    <div id="imagePreview"></div>
     <input type="number" id="rate" name="rate" placeholder="Charges in Rs. per day" required>
     <input type="submit" name="initial" id="initial">
+  </form>
+  
+  
+  <script>
+    function previewImage(event) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        var output = document.getElementById('imagePreview');
+        output.innerHTML = '<img src="' + reader.result + '" width="200"/>';
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+
+
+    document.getElementById("locationForm").addEventListener("submit", function(event) {
+    console.log('Form submitted');
+    var fileInput = document.getElementById('photo');
+    if (!fileInput.value) { 
+        console.log('No photo uploaded');
+        alert('Please upload a photo.');
+        event.preventDefault();
+    } else {
+        var fileSize = fileInput.files[0].size; 
+        var maxSize = 1024 * 1024; 
+  
+        if (fileSize > maxSize) {
+            var message = 'Please upload an image with a file size less than 1 MB.\n\nClick OK to resize the image, or Cancel to stay on this page.';
+            var resize = confirm(message);
+            if (resize) {
+                window.open("https://imageresizer.com/image-compressor", "_blank");
+                event.preventDefault();
+            } else {
+                event.preventDefault();
+            }
+        }
+    }
+});
+
+  </script> 
+  
+  
+  
+  
+
 
   {% else %}
   <a href="login">Login</a>

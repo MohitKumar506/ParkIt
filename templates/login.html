@@ -42,7 +42,7 @@
         form input[type="text"],
         form input[type="email"],
         form input[type="password"] {
-            width: calc(100% - 20px);
+            width: calc(100%);
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
@@ -92,10 +92,13 @@
     <form action="" method="POST">
         {% csrf_token %}
         <p>Enter Username</p>
-        <input type="text" id="username" name="username" placeholder="Your username">
+        <input type="text" id="usernamez" name="username" placeholder="Your username">
         <p>Enter Password</p>
         <input type="password" name="password" id="password" placeholder="Your password">
         <input type="submit" value="Login">
+        <br>
+        <br>
+        <div class="forget" style="text-align: right;"><a href="{% url 'password_reset' %}">Forgot password?</a></div>
     </form>
 
     <h3>Don't have an account? <a href="/">Register here</a></h3>

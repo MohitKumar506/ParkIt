@@ -81,21 +81,22 @@
     </style>
 </head>
 <body>
-	<h1>Register Here</h1>
-	{% if messages %}
-	<div class="container">
-		{% for message in messages %}
-			{% if message.tags == "success" %}
-				<div class="message">{{ message }} <a href="{% url 'login' %}">Login</a></div>
-			{% else %}
-				<div class="error">{{ message }}</div>
-			{% endif %}
-		{% endfor %}
-	</div>
-	{% endif %}
-	
+    <h1>Register Here</h1>
+    <p style="text-align: center;">Already registered? <a href="{% url 'login' %}"><style></style><b>Login here</b></a></p>
+    {% if messages %}
+    <div class="container">
+        {% for message in messages %}
+            {% if message.tags == "success" %}
+                <div class="message">{{ message }} <a href="{% url 'login' %}">Login</a></div>
+            {% else %}
+                <div class="error">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    
 
-    <form action="" method="POST">
+    <form action="" method="POST">  
         {% csrf_token %}
         <p>Enter Username
             <br>
@@ -110,7 +111,5 @@
         <input type="password" name="password2" id="password2">
         <input type="submit" value="Register">
     </form>
-    <br>
-    <h3>Already registered? <a href="login">Login here</a></h3>
 </body>
 </html>
